@@ -1,0 +1,29 @@
+Steps taken for intermittent browser connectivity issue:
+
+1) Logged into amazon ec2 instance with the certificate pem key provided
+
+2) i had to orient myself to understand what was configured in terms of connectivity, ips, subnets, dns resolv files
+etc.
+
+3) I used ifconfig -a to check the interfaces and verified that the subnets, broadcast, ip address were all proper
+
+4) from there I also checked the resolv.conf file to understand the name servers config as wrong ip addressing,
+subnetting, gateway address, and dns resolvers are the usual culprits when it comes to connectivity issues especially
+with browsers when we need name resolution
+
+5) I then proceeded to check the logs in /var/log directory and noticed DHCP renewal is happening every 1800 seconds or
+30 minutes
+
+6) I also checked the cd /var/lib/dhclient directory for the dhcp leases, but I'm use to the dhclient leases being
+kept in a different directory so i had to verify which directory it was on the ec2 instance
+
+7) from there i checked all the leases assigned to eth 0 in (cat dhclient--eth0.lease)
+and noticed they were renewing every 30 minutes or so
+
+8) so based on those two files and assuming this is the server for the webpage the clients are browsing the renewal
+of the lease every 30 minutes, involvoing the DORA process of DHCP which is discovery, offer, request, accept the IP
+address of the webserver was changing or could change which would start the prcess of binding all over again that could
+cause disruption and hence the timeoout on the webpages every 30 minutes for a few seconds till the server got it's IP
+again through the DHCP server
+
+9) general practice is to keep the IPs static in this case and exclude it from the DHCP pool
