@@ -1,0 +1,10 @@
+Steps taken for problem 3 Zyxel firewall config
+
+1) I do not have experience in Zyxel firewalls but after looking at the configuration, it was very similar to Cisco
+routers configuration
+
+2) I leveraged the standard configuration and some preliminary searches to make sure I get the syntax right for the
+DHCP lease time
+
+3) Once I configure VLAN 5 DHCP pool and the interface vlan settings, I added the VLAN 5 to the DMZ considering that is
+the standard internet access
